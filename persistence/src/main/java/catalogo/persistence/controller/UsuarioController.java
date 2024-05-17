@@ -38,6 +38,9 @@ public class UsuarioController {
     @Autowired
     private UpdateStateService updateStateService;
 
+
+    private final UpdateProveedorService updateProveedorService;
+
     @Autowired
     private CadenaProductivaService cadenaProductivaService;
 
@@ -57,6 +60,10 @@ public class UsuarioController {
 
     @Autowired
     private PersonaJuridicaRepository personaJuridicaRepository;
+
+    public UsuarioController(UpdateProveedorService updateProveedorService) {
+        this.updateProveedorService = updateProveedorService;
+    }
 
     @PostMapping(value = "/registro", consumes = "multipart/form-data")
     public ResponseEntity<?> registrar(
@@ -228,73 +235,6 @@ public class UsuarioController {
     }
 
 
-//    @GetMapping("/usuariosPendiente")
-//    public ResponseEntity<?> getUsuariosPendiente() {
-//        List<Usuario> usuarios = usuarioService.getUsuarioAll();
-//
-//        usuarios = usuarios.stream()
-//                .filter(usuario -> !usuario.getRuc().equals(20131369477L))
-//                .filter(usuario -> usuario.getFlagEstado() == 1)
-//                .collect(Collectors.toList());
-//
-//        if (usuarios.isEmpty()) {
-//            Map<String, String> error = new HashMap<>();
-//            error.put("error", "No se encontraron usuarios");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-//        }
-//
-//        List<Map<String, Object>> responses = usuarios.stream()
-//                .flatMap(usuario -> {
-//                    List<PersonaJuridica> personaJuridicas = personaJuridicaService
-//                            .getActivePJuridicasByCodUsuarioTwo(usuario.getCodUsuario());
-//
-//                    return personaJuridicas.stream().map(personaJuridica -> {
-//                        CadenaProductiva cadenaProductiva = cadenaProductivaService
-//                                .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
-//                        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getServicio().getId());
-//                        Departamento departamento = departamentoService.getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
-//                        Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
-//
-//                        Map<String, Object> response = new HashMap<>();
-//                        response.put("ruc", usuario.getRuc());
-//                        response.put("correo", usuario.getCorreo());
-//                        response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
-//                        response.put("razonSocial", personaJuridica.getRazonSocial());
-//                        response.put("nombres", personaJuridica.getNombres());
-//                        response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
-//                        response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-//                        response.put("genero", personaJuridica.getGenero());
-//                        response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-//                        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-//                        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-//                        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
-//                        response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
-//                        response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
-//                        response.put("sector", sector.getDescripcion());
-//                        response.put("servicioTitulo", servicio.getTitulo());
-//                        response.put("servicioDescrip", servicio.getDescripcion());
-//                        response.put("direccion", personaJuridica.getDireccion());
-//                        response.put("departamento", personaJuridica.getDepartamentos());
-//                        response.put("provincia", personaJuridica.getProvincia());
-//                        response.put("distrito", personaJuridica.getDistrito());
-//                        response.put("departamentos", personaJuridica.getDistrito());
-//                        response.put("departamentos", departamento.getDescripcion());
-//                        response.put("provincia", personaJuridica.getProvincia());
-//                        response.put("flagestado", personaJuridica.getFlagEstado());
-//                        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
-//                        response.put("web", personaJuridica.getWebsite());
-//                        response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
-//
-//                        return response;
-//                    });
-//                })
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(responses);
-//    }
-
-
-
     @GetMapping("/usuariosPendiente")
     public ResponseEntity<?> getUsuarioPendiente() {
         List<Usuario> usuarios = usuarioService.getUsuarioAll();
@@ -371,7 +311,7 @@ public class UsuarioController {
         usuarios = usuarios.stream()
                 .filter(usuario -> !usuario.getRuc().equals(20131369477L))
                 .filter(usuario -> usuario.getFlagEstado() == 1)
-                .collect(Collectors.toList());
+                .toList();
 
         if (usuarios.isEmpty()) {
             Map<String, String> error = new HashMap<>();
@@ -499,6 +439,16 @@ public class UsuarioController {
 
         return ResponseEntity.ok(responses);
     }
+
+
+//    @GetMapping("/UpdateProveedor")
+//    public ResponseEntity<?> updateDatos(){
+//
+//
+//
+//    }
+
+
 }
 
 

@@ -47,8 +47,8 @@ public class RegistroService {
     public void registrarProveedor(UsuarioDTO usuarioDTO,
                                    PersonaJuridicaDTO personaJuridicaDTO,
                                    MultipartFile pdfCV,
-                                   MultipartFile pdfCertificado,
                                    MultipartFile pdfAutorizacion,
+                                   MultipartFile pdfCertificado,
                                    MultipartFile imagen,
                                    MultipartFile pdfFichaRuc) throws Exception {
 
@@ -194,10 +194,11 @@ public class RegistroService {
         Path path;
         switch (tipo) {
             case 1: // Currículum
-                path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
+                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
+
                 break;
             case 2: // Certificado
-                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
+                path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
                 break;
             case 3:
                 path = Paths.get(directoryPathThree, ruc + "-cv.pdf");
