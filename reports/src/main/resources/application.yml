@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: reports
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+server:
+  address: 11.40.80.21
+  port: 9030
+
+cors:
+  url:
+
+persistence:
+  url: http://192.168.1.47:9000
+#  url: http://localhost:9000
+
+
