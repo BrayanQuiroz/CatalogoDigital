@@ -86,17 +86,16 @@ public class RegistroService {
         personaJuridica.setApellidoMaterno(personaJuridicaDTO.getApellidoMaterno());
         personaJuridica.setApellidoPaterno(personaJuridicaDTO.getApellidoPaterno());
         personaJuridica.setNombres(personaJuridicaDTO.getNombres());
-        personaJuridica.setGenero(personaJuridicaDTO.getGenero());
-        personaJuridica.setCarreraProfesional(personaJuridicaDTO.getCarreraProfesional());
+
+
         personaJuridica.setExperienciaLaboral(personaJuridicaDTO.getExperienciaLaboral());
         personaJuridica.setRazonSocial(personaJuridicaDTO.getRazonSocial());
-        personaJuridica.setDepartamentos(personaJuridicaDTO.getDepartamentos());
-        personaJuridica.setNivelAcademico(personaJuridicaDTO.getNivelAcademico());
+
         personaJuridica.setWebsite(personaJuridicaDTO.getWebsite());
         personaJuridica.setDireccion(personaJuridicaDTO.getDireccion());
         personaJuridica.setDistrito(personaJuridicaDTO.getDistrito());
         personaJuridica.setProvincia(personaJuridicaDTO.getProvincia());
-        personaJuridica.setTipoProveedor(personaJuridicaDTO.getTipoProveedor());
+
         personaJuridica.setDni(personaJuridicaDTO.getDni());
         personaJuridica.setFechreg(new Timestamp(System.currentTimeMillis()));
         personaJuridica.setUsureg(String.valueOf(personaJuridicaDTO.getRuc()));

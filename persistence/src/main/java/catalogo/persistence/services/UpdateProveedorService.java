@@ -1,56 +1,68 @@
 package catalogo.persistence.services;
 
-import catalogo.persistence.models.PersonaJuridica;
-import catalogo.persistence.models.Usuario;
+import catalogo.persistence.dto.UpdateProveedorDTO;
+import catalogo.persistence.models.*;
 import catalogo.persistence.repositories.PersonaJuridicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UpdateProveedorService  extends PersonaJuridicaService{
 
     private final PersonaJuridicaRepository personaJuridicaRepository;
     private final UsuarioService usuarioService;
+    private final DepartamentoService departamentoService;
+    private final CadenaProductivaService cadenaProductivaService;
+    private final ServicioService servicioService;
+    private final SectorService sectorService;
+
 
     @Autowired
-    public UpdateProveedorService(PersonaJuridicaRepository personaJuridicaRepository, UsuarioService usuarioService) {
+    public UpdateProveedorService(PersonaJuridicaRepository personaJuridicaRepository, UsuarioService usuarioService, DepartamentoService departamentoService, CadenaProductivaService cadenaProductivaService, ServicioService servicioService, SectorService sectorService) {
         super(personaJuridicaRepository);
         this.personaJuridicaRepository = personaJuridicaRepository;
         this.usuarioService = usuarioService;
+        this.departamentoService = departamentoService;
+        this.cadenaProductivaService = cadenaProductivaService;
+        this.servicioService = servicioService;
+        this.sectorService = sectorService;
     }
 
     public void updateDatos(Integer codUsuario) {
         List<PersonaJuridica> observadas = getActivePJuridicasByCodUsuario(codUsuario);
     }
 
+    public void getProveedorByRuc(Long ruc,UpdateProveedorDTO updateProveedorDTO){
 
-    public ResponseEntity<Map<String, String>> getProveedorByRuc(Long ruc){
+        try{
+            System.out.println("Buscando usuario con RUC: " + ruc);
+            Usuario usuario = usuarioService.getUsuarioByRuc(ruc);
 
-        Usuario usuario = usuarioService.getUsuarioByRuc(ruc);
 
-        if( usuario == null || usuario.getFlagEstado() != 1){
+            System.out.println("Aquí el ruc "+usuario);
 
-            Map<String, String> error = new HashMap<>();
+            if (usuario == null) {
 
-            error.put("Erro", "No se encontro el usuario");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+                throw new RuntimeException("No existe un usuario con el RUC proporcionado, no se puede actualizar datos.");
+            }
+
+            PersonaJuridica personaJuridica = new PersonaJuridica();
+
+            Usuario codUsuario = usuarioService.getUsuarioByUsuario(updateProveedorDTO.getUsuario());
+
+            personaJuridica.setUsuario(codUsuario);
+
+
+            personaJuridica.setFlagUpdate((short)0);
+            personaJuridica.setFlagEstado((short)1);
+
+            personaJuridicaRepository.save(personaJuridica);
+
+        }catch (Exception e){
+            throw new RuntimeException("Error: ",e);
         }
-
-        PersonaJuridica personaJuridica = getActivePJuridicaByCodUsuario(usuario);
-
-        if (personaJuridica == null) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "El usuario no está activo o actualizado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-
-        return null;
     }
 
 }

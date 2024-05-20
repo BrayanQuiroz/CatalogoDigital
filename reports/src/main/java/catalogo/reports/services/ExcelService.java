@@ -36,7 +36,7 @@ public class ExcelService {
             String[] columnas = {
                                 "RUC","Correo","Razón social","DNI","Nombre", "Apellido Paterno",  "Apellido Materno", "Genero",
                                 "Departamento","Provincia", "Distrito", "Dirección","Experiencia laboral", "Carrera profesional",
-                                "Web","Nivel academico", "Cadena productiva", "Sector", "TipoProveedor","Región"
+                                "Web","Nivel academico", "Cadena productiva", "Sector", "Especialidad","TipoProveedor","Región"
                                  };
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < columnas.length; i++) {
@@ -63,9 +63,10 @@ public class ExcelService {
                 row.createCell(14).setCellValue(dato.getNivelAcademico());
                 row.createCell(15).setCellValue(dato.getCadenaProductiva());
                 row.createCell(16).setCellValue(dato.getSector());
-                row.createCell(17).setCellValue(dato.getDireccion());
-                row.createCell(18).setCellValue(dato.getTipoProveedor());
-                row.createCell(19).setCellValue(dato.getDepartamento());
+                row.createCell(17).setCellValue(dato.getEspecialidad());
+                row.createCell(18).setCellValue(dato.getDireccion());
+                row.createCell(19).setCellValue(dato.getTipoProveedor());
+                row.createCell(20).setCellValue(dato.getDepartamento());
             }
 
             workbook.write(out);

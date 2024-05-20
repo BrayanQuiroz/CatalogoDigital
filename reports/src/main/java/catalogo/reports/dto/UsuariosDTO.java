@@ -32,11 +32,11 @@ public class UsuariosDTO {
     @JsonProperty("web")
     private String web;
     @JsonProperty("genero")
-    private String genero;
+    private Integer genero;
     @JsonProperty("nivelAcademico")
-    private String nivelAcademico;
+    private Integer nivelAcademico;
     @JsonProperty("cadenaProductiva")
-    private String cadenaProductiva;
+    private Integer cadenaProductiva;
     @JsonProperty("sector")
     private String sector;
     @JsonProperty("distrito")
@@ -44,7 +44,9 @@ public class UsuariosDTO {
     @JsonProperty("direccion")
     private String direccion;
     @JsonProperty("tipoProveedor")
-    private String tipoProveedor;
+    private Integer tipoProveedor;
     @JsonProperty("departamento")
-    private String departamento;
+    private Integer departamento;
+    @JsonProperty("especialidad")
+    private Integer especialidad;
 }

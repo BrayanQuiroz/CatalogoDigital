@@ -4,9 +4,7 @@ import catalogo.persistence.dto.DatosDTO;
 import catalogo.persistence.dto.PersonaJuridicaDTO;
 import catalogo.persistence.dto.UsuarioDTO;
 import catalogo.persistence.models.*;
-import catalogo.persistence.repositories.PersonaJuridicaRepository;
-import catalogo.persistence.repositories.TipoUsuarioRepository;
-import catalogo.persistence.repositories.UsuarioRepository;
+import catalogo.persistence.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -22,6 +20,10 @@ public class DatosService {
     private final PersonaJuridicaRepository personaJuridicaRepository;
     private final TipoUsuarioRepository tipoUsuarioRepository;
     private final SendEmailService sendEmailService;
+    private final DepartamentoRepository departamentoRepository;
+    private final CadenaProductivaRepository cadenaProductivaRepository;
+    private final ServicioService servicioService;
+    private final SectorRepository sectorRepository;
 //    private final String usuarioCreador;
 
     @Autowired
@@ -29,14 +31,18 @@ public class DatosService {
             UsuarioRepository usuarioRepository,
             PersonaJuridicaRepository personaJuridicaRepository,
             TipoUsuarioRepository tipoUsuarioRepository,
-            SendEmailService sendEmailService
+            SendEmailService sendEmailService,
 //            @Value("${users.creation}") String usuarioCreador
-    ) {
+            DepartamentoRepository departamentoRepository, CadenaProductivaRepository cadenaProductivaRepository, ServicioService servicioService, SectorRepository sectorRepository) {
         this.usuarioRepository = usuarioRepository;
         this.personaJuridicaRepository = personaJuridicaRepository;
         this.tipoUsuarioRepository = tipoUsuarioRepository;
         this.sendEmailService = sendEmailService;
 //        this.usuarioCreador = usuarioCreador;
+        this.departamentoRepository = departamentoRepository;
+        this.cadenaProductivaRepository = cadenaProductivaRepository;
+        this.servicioService = servicioService;
+        this.sectorRepository = sectorRepository;
     }
 
     public void guardarDatos(DatosDTO datos) {
@@ -76,39 +82,51 @@ public class DatosService {
     private PersonaJuridica convertirPersonaJuridica(PersonaJuridicaDTO personaJuridicaDTO) {
         PersonaJuridica personaJuridica = new PersonaJuridica();
 
+
+        Departamento departamento = departamentoRepository
+                .findDepartamentoByCodDep(personaJuridicaDTO.getDepartamento());
+
+        CadenaProductiva cadenaProductiva = cadenaProductivaRepository
+                .findCadenaProductivaByCodcadprod(personaJuridicaDTO.getCadenaProductiva());
+
+        Servicio servicio = servicioService
+                .getServicioByCodServicio(personaJuridicaDTO.getServicio());
+
+        Sector sector = sectorRepository
+                .findSectorByCodSector(personaJuridicaDTO.getSector());
+
+        System.out.println(personaJuridicaDTO.getSector());
+        System.out.println(personaJuridicaDTO.getServicio());
+        System.out.println(personaJuridicaDTO.getCadenaProductiva());
+
         personaJuridica.setRuc(personaJuridicaDTO.getRuc());
         personaJuridica.setApellidoMaterno(personaJuridicaDTO.getApellidoMaterno());
         personaJuridica.setApellidoPaterno(personaJuridicaDTO.getApellidoPaterno());
         personaJuridica.setNombres(personaJuridicaDTO.getNombres());
-        personaJuridica.setGenero(personaJuridicaDTO.getGenero());
+
         personaJuridica.setCarreraProfesional(personaJuridicaDTO.getCarreraProfesional());
         personaJuridica.setExperienciaLaboral(personaJuridicaDTO.getExperienciaLaboral());
         personaJuridica.setRazonSocial(personaJuridicaDTO.getRazonSocial());
-        personaJuridica.setDepartamentos(personaJuridicaDTO.getDepartamentos());
-        personaJuridica.setNivelAcademico(personaJuridicaDTO.getNivelAcademico());
-        personaJuridica.setWebsite(personaJuridicaDTO.getWebsite());
-        personaJuridica.setDireccion(personaJuridicaDTO.getDireccion());
-        personaJuridica.setDistrito(personaJuridicaDTO.getDistrito());
-        personaJuridica.setProvincia(personaJuridicaDTO.getProvincia());
 
-        personaJuridica.setTipoProveedor(personaJuridicaDTO.getTipoProveedor());
-        personaJuridica.setDni(personaJuridicaDTO.getDni());
-        Departamento departamento = new Departamento();
-        departamento.setCodDep(1);
+        personaJuridica.setWebsite(personaJuridicaDTO.getWebsite());
+
         personaJuridica.setDepartamento(departamento);
+        personaJuridica.setCadenaProductiva(cadenaProductiva);
+        personaJuridica.setServicio(servicio);
+        personaJuridica.setSector(sector);
+
         personaJuridica.setFechreg(new Timestamp(System.currentTimeMillis()));
 
-        CadenaProductiva cadenaProductiva = new CadenaProductiva();
-        cadenaProductiva.setCodcadprod(1);
-        personaJuridica.setCadenaProductiva(cadenaProductiva);
 
-        Servicio servicio = new Servicio();
-        servicio.setId(1);
-        personaJuridica.setServicio(servicio);
 
-        Sector sector = new Sector();
-        sector.setCodSector(1);
-        personaJuridica.setSector(sector);
+        TipoPersona tipoPersona = new TipoPersona();
+        tipoPersona.setId(1);
+        personaJuridica.setTipoPersona(tipoPersona);
+
+        TipoProveedor tipoProveedor = new TipoProveedor();
+        tipoProveedor.setId(2);
+
+
 
         personaJuridica.setActivo(1);
         personaJuridica.setHabido(1);

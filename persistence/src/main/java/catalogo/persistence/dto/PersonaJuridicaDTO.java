@@ -10,23 +10,25 @@ public class PersonaJuridicaDTO {
     private Long ruc;
     private String razonSocial;
     private String direccion;
-    private String departamentos;
     private String provincia;
     private String distrito;
     private String nombres;
-    private String genero;
     private Integer activo;
     private Integer dni;
     private Integer habido;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private Date fechaNacimiento;
-    private String tipoProveedor;
-    private String nivelAcademico;
+    private Integer tipoProveedor;
+    private Integer tipoPersona;
+    private Integer genero;
+    private Integer NivelAcademico;
     private String carreraProfesional;
     private Short experienciaLaboral;
     private String website;
     private Integer departamento;
     private Integer cadenaProductiva;
     private Integer sector;
+    private Integer servicio;
+
 }

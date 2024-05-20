@@ -33,9 +33,9 @@ public class PersonaJuridica {
     @JsonProperty("web")
     private String web;
     @JsonProperty("genero")
-    private String genero;
+    private Integer genero;
     @JsonProperty("nivelAcademico")
-    private String nivelAcademico;
+    private Integer nivelAcademico;
     @JsonProperty("cadenaProductiva")
     private Integer cadenaProductiva;
     @JsonProperty("sector")
@@ -43,8 +43,13 @@ public class PersonaJuridica {
     @JsonProperty("direccion")
     private String direccion;
     @JsonProperty("tipoProveedor")
-    private String tipoProveedor;
+    private Integer tipoProveedor;
     @JsonProperty("departamento")
     private Integer departamento;
+    @JsonProperty("servicio")
+    private Integer servicio;
+    @JsonProperty("especialidad")
+    private Integer especialidad;
+
 
 }

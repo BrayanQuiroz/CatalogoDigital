@@ -1,9 +1,7 @@
 package catalogo.persistence.controller;
 
-import catalogo.persistence.dto.DatosDTO;
-import catalogo.persistence.dto.PersonaJuridicaDTO;
-import catalogo.persistence.dto.UpdateStateDTO;
-import catalogo.persistence.dto.UsuarioDTO;
+import catalogo.persistence.dto.*;
+import catalogo.persistence.repositories.TipoPersonaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import catalogo.persistence.models.*;
@@ -60,6 +58,16 @@ public class UsuarioController {
 
     @Autowired
     private PersonaJuridicaRepository personaJuridicaRepository;
+    @Autowired
+    private GeneroService generoService;
+    @Autowired
+    private TipoPersonService tipoPersonService;
+    @Autowired
+    private TipoProveedorService tipoProveedorService;
+    @Autowired
+    private NivelAcademicoService nivelAcademicoService;
+    @Autowired
+    private EspecialidadServicie especialidadServicie;
 
     public UsuarioController(UpdateProveedorService updateProveedorService) {
         this.updateProveedorService = updateProveedorService;
@@ -79,7 +87,6 @@ public class UsuarioController {
                 pdfCertificado, imagen,pdfFichaRuc);
         return ResponseEntity.ok().body("Registro completado con éxito.");
     }
-
 
     @GetMapping("/usuarios")
     public ResponseEntity<?> getUsuarios() {
@@ -101,12 +108,19 @@ public class UsuarioController {
                     List<PersonaJuridica> personaJuridicas = personaJuridicaService.getActivePJuridicasByCodUsuario(usuario.getCodUsuario());
 
                     return personaJuridicas.stream().map(personaJuridica -> {
-                        CadenaProductiva cadenaProductiva = cadenaProductivaService.getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
+                        CadenaProductiva cadenaProductiva = cadenaProductivaService
+                                .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
+                        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+                        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
+                        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+                        NivelAcademico nivelAcademico = nivelAcademicoService.getNivelAcademico(personaJuridica.getTipoPersona().getId());
                         Sector sector = sectorService.getSectorByCodSector(personaJuridica.getServicio().getId());
                         Departamento departamento = departamentoService.getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
                         Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
 
-                        Map<String, Object> response = new HashMap<>();
+                        Especialidad especialidad = especialidadServicie.getEspecialidad(personaJuridica.getEspecialidad().getId());
+
+                        Map<String, Object> response = new LinkedHashMap<>();
                         response.put("ruc", usuario.getRuc());
                         response.put("correo", usuario.getCorreo());
                         response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
@@ -114,25 +128,32 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-                        response.put("genero", personaJuridica.getGenero());
+                        response.put("idGenero", genero.getId());
+                        response.put("genero",  genero.getDescripcion());
+                        response.put("idTipoPersona",  tipoPersona.getId());
+                        response.put("TipoPersona",  tipoPersona.getDescripcion());
+                        response.put("idTipoProveedor",  proveedor.getId());
+                        response.put("TipoProveedor",  proveedor.getDescripcion());
+                        response.put("idNivelAcademico",  nivelAcademico.getId());
+                        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
                         response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-                        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-                        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-                        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
                         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
+                        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
                         response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+                        response.put("idEspecialidad", especialidad.getId());
+                        response.put("especialidad", especialidad.getDescripcion());
+                        response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());
-                        response.put("departamento", personaJuridica.getDepartamentos());
                         response.put("provincia", personaJuridica.getProvincia());
                         response.put("distrito", personaJuridica.getDistrito());
-                        response.put("departamentos", personaJuridica.getDistrito());
-                        response.put("departamentos", departamento.getDescripcion());
-                        response.put("provincia", personaJuridica.getProvincia());
+                        response.put("departamento", departamento.getDescripcion());
+                        response.put("idDepartamento", departamento.getCodDep());
                         response.put("flagestado", personaJuridica.getFlagEstado());
-                        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
+                        response.put("flagUpdate", personaJuridica.getFlagUpdate());
                         response.put("web", personaJuridica.getWebsite());
                         response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
 
@@ -143,7 +164,6 @@ public class UsuarioController {
 
         return ResponseEntity.ok(responses);
     }
-
 
 
     @GetMapping("/{ruc}")
@@ -163,47 +183,56 @@ public class UsuarioController {
             error.put("error", "El usuario no está activo o actualizado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
-        CadenaProductiva cadenaProductiva = cadenaProductivaService.getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
-        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getServicio().getId());
+        CadenaProductiva cadenaProductiva = cadenaProductivaService
+                .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
+        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
+        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+        NivelAcademico nivelAcademico = nivelAcademicoService.getNivelAcademico(personaJuridica.getTipoPersona().getId());
+        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getSector().getCodSector());
         Departamento departamento = departamentoService.getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
         Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
 
+        Especialidad especialidad = especialidadServicie.getEspecialidad(personaJuridica.getEspecialidad().getId());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("codusuario", usuario.getCodUsuario());
+
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("ruc", usuario.getRuc());
-        response.put("password", usuario.getPassword());
-        response.put("estado", usuario.getFlagEstado());
-        response.put("flagEstado", usuario.getFlagEstado());
+        response.put("correo", usuario.getCorreo());
         response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
         response.put("razonSocial", personaJuridica.getRazonSocial());
         response.put("nombres", personaJuridica.getNombres());
         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-        response.put("genero", personaJuridica.getGenero());
+        response.put("idGenero", genero.getId());
+        response.put("password", usuario.getPassword());
+        response.put("genero",  genero.getDescripcion());
+        response.put("idTipoPersona",  tipoPersona.getId());
+        response.put("TipoPersona",  tipoPersona.getDescripcion());
+        response.put("idTipoProveedor",  proveedor.getId());
+        response.put("TipoProveedor",  proveedor.getDescripcion());
+        response.put("idNivelAcademico",  nivelAcademico.getId());
+        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
         response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
-        response.put("certificadoLaboral", personaJuridica.getCertificadoLaboral());
-        response.put("curriculum", personaJuridica.getCurriculum());
+        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
+        response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+        response.put("idEspecialidad", especialidad.getId());
+        response.put("especialidad", especialidad.getDescripcion());
+        response.put("idSector", sector.getCodSector());
+        response.put("sector", sector.getDescripcion());
+        response.put("idServicio", servicio.getId());
         response.put("servicioTitulo", servicio.getTitulo());
         response.put("servicioDescrip", servicio.getDescripcion());
-        response.put("update", personaJuridica.getFlagUpdate());
-        response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
-        response.put("sector", sector.getDescripcion());
         response.put("direccion", personaJuridica.getDireccion());
-        response.put("departamento", personaJuridica.getDepartamentos());
         response.put("provincia", personaJuridica.getProvincia());
         response.put("distrito", personaJuridica.getDistrito());
-        response.put("departamentos", personaJuridica.getDistrito());
-        response.put("departamentos", departamento.getDescripcion());
-        response.put("provincia", personaJuridica.getProvincia());
-        response.put("web", personaJuridica.getWebsite());
+        response.put("departamento", departamento.getDescripcion());
+        response.put("idDepartamento", departamento.getCodDep());
         response.put("flagestado", personaJuridica.getFlagEstado());
-        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
-        response.put("pathImagen","https://dcatalogodigital.itp.gob.pe/media/"+usuario.getRuc()+".png");
+        response.put("flagUpdate", personaJuridica.getFlagUpdate());
+        response.put("web", personaJuridica.getWebsite());
+        response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
 
         return ResponseEntity.ok(response);
 
@@ -265,7 +294,14 @@ public class UsuarioController {
                         Servicio servicio = servicioService
                                 .getServicioByCodServicio(personaJuridica.getServicio().getId());
 
-                        Map<String, Object> response = new HashMap<>();
+                        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+                        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
+                        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+                        NivelAcademico nivelAcademico = nivelAcademicoService.getNivelAcademico(personaJuridica.getTipoPersona().getId());
+
+                        Especialidad especialidad = especialidadServicie.getEspecialidad(personaJuridica.getEspecialidad().getId());
+
+                        Map<String, Object> response = new LinkedHashMap<>();
                         response.put("ruc", usuario.getRuc());
                         response.put("correo", usuario.getCorreo());
                         response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
@@ -273,25 +309,32 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-                        response.put("genero", personaJuridica.getGenero());
+                        response.put("idGenero", genero.getId());
+                        response.put("genero",  genero.getDescripcion());
+                        response.put("idTipoPersona",  tipoPersona.getId());
+                        response.put("TipoPersona",  tipoPersona.getDescripcion());
+                        response.put("idTipoProveedor",  proveedor.getId());
+                        response.put("TipoProveedor",  proveedor.getDescripcion());
+                        response.put("idNivelAcademico",  nivelAcademico.getId());
+                        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
                         response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-                        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-                        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-                        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
                         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
+                        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
                         response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+                        response.put("idEspecialidad", especialidad.getId());
+                        response.put("especialidad", especialidad.getDescripcion());
+                        response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());
-                        response.put("departamento", personaJuridica.getDepartamentos());
                         response.put("provincia", personaJuridica.getProvincia());
                         response.put("distrito", personaJuridica.getDistrito());
-                        response.put("departamentos", personaJuridica.getDistrito());
-                        response.put("departamentos", departamento.getDescripcion());
-                        response.put("provincia", personaJuridica.getProvincia());
+                        response.put("departamento", departamento.getDescripcion());
+                        response.put("idDepartamento", departamento.getCodDep());
                         response.put("flagestado", personaJuridica.getFlagEstado());
-                        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
+                        response.put("flagUpdate", personaJuridica.getFlagUpdate());
                         response.put("web", personaJuridica.getWebsite());
                         response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
 
@@ -334,6 +377,15 @@ public class UsuarioController {
                         Servicio servicio = servicioService
                                 .getServicioByCodServicio(personaJuridica.getServicio().getId());
 
+                        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+                        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
+                        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+                        NivelAcademico nivelAcademico = nivelAcademicoService
+                                .getNivelAcademico(personaJuridica.getTipoPersona().getId());
+
+                        Especialidad especialidad = especialidadServicie
+                                .getEspecialidad(personaJuridica.getEspecialidad().getId());
+
                         Map<String, Object> response = new HashMap<>();
                         response.put("ruc", usuario.getRuc());
                         response.put("correo", usuario.getCorreo());
@@ -342,25 +394,32 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-                        response.put("genero", personaJuridica.getGenero());
+                        response.put("idGenero", genero.getId());
+                        response.put("genero",  genero.getDescripcion());
+                        response.put("idTipoPersona",  tipoPersona.getId());
+                        response.put("TipoPersona",  tipoPersona.getDescripcion());
+                        response.put("idTipoProveedor",  proveedor.getId());
+                        response.put("TipoProveedor",  proveedor.getDescripcion());
+                        response.put("idNivelAcademico",  nivelAcademico.getId());
+                        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
                         response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-                        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-                        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-                        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
                         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
+                        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
                         response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+                        response.put("idEspecialidad", especialidad.getId());
+                        response.put("especialidad", especialidad.getDescripcion());
+                        response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());
-                        response.put("departamento", personaJuridica.getDepartamentos());
                         response.put("provincia", personaJuridica.getProvincia());
                         response.put("distrito", personaJuridica.getDistrito());
-                        response.put("departamentos", personaJuridica.getDistrito());
-                        response.put("departamentos", departamento.getDescripcion());
-                        response.put("provincia", personaJuridica.getProvincia());
+                        response.put("departamento", departamento.getDescripcion());
+                        response.put("idDepartamento", departamento.getCodDep());
                         response.put("flagestado", personaJuridica.getFlagEstado());
-                        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
+                        response.put("flagUpdate", personaJuridica.getFlagUpdate());
                         response.put("web", personaJuridica.getWebsite());
                         response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
 
@@ -402,7 +461,15 @@ public class UsuarioController {
                         Servicio servicio = servicioService
                                 .getServicioByCodServicio(personaJuridica.getServicio().getId());
 
-                        Map<String, Object> response = new HashMap<>();
+                        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+                        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
+                        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+                        NivelAcademico nivelAcademico = nivelAcademicoService
+                                .getNivelAcademico(personaJuridica.getTipoPersona().getId());
+                        Especialidad especialidad = especialidadServicie
+                                .getEspecialidad(personaJuridica.getEspecialidad().getId());
+
+                        Map<String, Object> response = new LinkedHashMap<>();
                         response.put("ruc", usuario.getRuc());
                         response.put("correo", usuario.getCorreo());
                         response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
@@ -410,25 +477,32 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
-                        response.put("genero", personaJuridica.getGenero());
+                        response.put("idGenero", genero.getId());
+                        response.put("genero",  genero.getDescripcion());
+                        response.put("idTipoPersona",  tipoPersona.getId());
+                        response.put("TipoPersona",  tipoPersona.getDescripcion());
+                        response.put("idTipoProveedor",  proveedor.getId());
+                        response.put("TipoProveedor",  proveedor.getDescripcion());
+                        response.put("idNivelAcademico",  nivelAcademico.getId());
+                        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
                         response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
-                        response.put("tipoProveedor", personaJuridica.getTipoProveedor());
-                        response.put("nivelAcademico", personaJuridica.getNivelAcademico());
-                        response.put("carreraProfesional", personaJuridica.getCarreraProfesional());
                         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
+                        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
                         response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+                        response.put("idEspecialidad", especialidad.getId());
+                        response.put("especialidad", especialidad.getDescripcion());
+                        response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());
-                        response.put("departamento", personaJuridica.getDepartamentos());
                         response.put("provincia", personaJuridica.getProvincia());
                         response.put("distrito", personaJuridica.getDistrito());
-                        response.put("departamentos", personaJuridica.getDistrito());
-                        response.put("departamentos", departamento.getDescripcion());
-                        response.put("provincia", personaJuridica.getProvincia());
+                        response.put("departamento", departamento.getDescripcion());
+                        response.put("idDepartamento", departamento.getCodDep());
                         response.put("flagestado", personaJuridica.getFlagEstado());
-                        response.put("getFlagUpdate", personaJuridica.getFlagUpdate());
+                        response.put("flagUpdate", personaJuridica.getFlagUpdate());
                         response.put("web", personaJuridica.getWebsite());
                         response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
 
@@ -441,13 +515,20 @@ public class UsuarioController {
     }
 
 
-//    @GetMapping("/UpdateProveedor")
-//    public ResponseEntity<?> updateDatos(){
+//    @PostMapping("/UpdateProveedor")
+//    public ResponseEntity<?> updateDatos( @RequestBody  UpdateProveedorDTO updateProveedorDTO requestBody){
+//        try{
 //
+//            Long ruc = requestBody.getRuc();
+//            UpdateProveedorDTO updateProveedorDTO = requestBody.getUpdateProveedorDTO();
 //
+//            updateProveedorService.getProveedorByRuc(ruc, updateProveedorDTO);
+//            return ResponseEntity.ok("Datos guardados exitosamente");
 //
+//        }catch (Exception e){
+//            throw new RuntimeException("Error",e);
+//        }
 //    }
-
 
 }
 

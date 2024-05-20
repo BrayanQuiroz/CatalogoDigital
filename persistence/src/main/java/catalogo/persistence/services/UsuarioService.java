@@ -21,6 +21,9 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public Usuario getUsuarioByUsuario(Integer codUsuario){
+        return usuarioRepository.findByCodUsuario(codUsuario);
+    }
 
     public Usuario getUsuarioByRuc(Long ruc) {
         return usuarioRepository.findByRuc(ruc);

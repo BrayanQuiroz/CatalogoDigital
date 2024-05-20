@@ -46,9 +46,31 @@ public class PersonaJuridica {
     @JoinColumn(name = "i_codsector")
     private Sector sector;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "i_codnivelac")
+    private NivelAcademico nivelAcademico;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "i_codgenero")
+    private Genero genero;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "i_codtipoper")
+    private TipoPersona tipoPersona;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "i_codtipoprov")
+    private TipoProveedor tipoProveedor;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "i_codespecialidad")
+    private Especialidad especialidad;
+
     @Column(name = "v_razonsocial", nullable = false, length = 80)
     private String razonSocial;
 
+    @Column(name = "v_carreraprofe", length = 50)
+    private String carreraProfesional;
 
     @Column(name = "i_activo")
     private Integer activo;
@@ -74,15 +96,12 @@ public class PersonaJuridica {
     @Column(name = "v_nombres",  length = 22)
     private String nombres;
 
-    @Column(name = "v_genero", length = 6)
-    private String genero;
 
     @Column(name = "v_apellidopater", length = 18)
     private String apellidoPaterno;
 
     @Column(name = "v_apellidomater", length = 18)
     private String apellidoMaterno;
-
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "i_coddep")
@@ -92,16 +111,7 @@ public class PersonaJuridica {
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
 
-    @Column(name = "v_tipoprov", nullable = false, length = 23)
-    private String tipoProveedor;
-
-    @Column(name = "v_nivelacadem", nullable = false, length = 15)
-    private String nivelAcademico;
-
-    @Column(name = "v_carreraprofe", length = 50)
-    private String carreraProfesional;
-
-    @Column(name = "s_explaboral", nullable = false)
+    @Column(name = "s_explaboral")
     private Short experienciaLaboral;
 
     @Column(name = "v_certilab", length = 50)

@@ -14,7 +14,7 @@ public class LeerExcel {
 
     public static List<RegistroDTO> leerExcel(InputStream excelInput) {
         List<RegistroDTO> registros = new ArrayList<>();
-        DataFormatter formatter = new DataFormatter(); // Formateador para leer valores de celda
+        DataFormatter formatter = new DataFormatter();
         try (Workbook workbook = new XSSFWorkbook(excelInput)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
@@ -30,20 +30,21 @@ public class LeerExcel {
                 pj.setNombres(formatter.formatCellValue(row.getCell(4)));
                 pj.setApellidoPaterno(formatter.formatCellValue(row.getCell(5)));
                 pj.setApellidoMaterno(formatter.formatCellValue(row.getCell(6)));
-                pj.setExperienciaLaboral(getNumberValue(row.getCell(7), Integer.class, 0)); // Uso de función genérica
+                pj.setExperienciaLaboral(getNumberValue(row.getCell(7), Integer.class, 0));
                 pj.setDepartamentos(formatter.formatCellValue(row.getCell(8)));
                 pj.setProvincia(formatter.formatCellValue(row.getCell(9)));
                 pj.setDistrito(formatter.formatCellValue(row.getCell(10)));
                 pj.setCarreraProfesional(formatter.formatCellValue(row.getCell(11)));
                 pj.setRazonSocial(formatter.formatCellValue(row.getCell(12)));
                 pj.setWeb(formatter.formatCellValue(row.getCell(13)));
-                pj.setGenero(formatter.formatCellValue(row.getCell(14)));
-                pj.setNivelAcademico(formatter.formatCellValue(row.getCell(15)));
-                pj.setCadenaProductiva(getNumberValue(row.getCell(16), Integer.class, 1)); // Uso de función genérica
-                pj.setSector(getNumberValue(row.getCell(17), Integer.class,1)); // Uso de función genérica
-                pj.setDireccion(formatter.formatCellValue(row.getCell(18)));
-                pj.setTipoProveedor(formatter.formatCellValue(row.getCell(19))); // Uso de función genérica
-                pj.setDepartamento(getNumberValue(row.getCell(20), Integer.class,1 )); // Uso de función genérica
+                pj.setGenero(Integer.valueOf(formatter.formatCellValue(row.getCell(14))));
+                pj.setNivelAcademico(Integer.valueOf(formatter.formatCellValue(row.getCell(15))));
+                pj.setCadenaProductiva(getNumberValue(row.getCell(16), Integer.class, 1));
+                pj.setSector(getNumberValue(row.getCell(17), Integer.class,1));
+                pj.setEspecialidad(getNumberValue(row.getCell(18), Integer.class,1));
+                pj.setDireccion(formatter.formatCellValue(row.getCell(19)));
+                pj.setTipoProveedor(Integer.valueOf(formatter.formatCellValue(row.getCell(20))));
+                pj.setDepartamento(getNumberValue(row.getCell(21), Integer.class,1 ));
 
                 RegistroDTO registro = new RegistroDTO();
                 registro.setUsuario(usuario);
