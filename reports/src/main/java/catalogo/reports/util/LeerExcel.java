@@ -25,26 +25,40 @@ public class LeerExcel {
                 usuario.setCorreo(formatter.formatCellValue(row.getCell(1)));
 
                 PersonaJuridica pj = new PersonaJuridica();
+                System.out.println("Aqui esta ruc "+ getLongValueFromCell(row.getCell(2)));
                 pj.setRuc(getLongValueFromCell(row.getCell(2)));
+                System.out.println("Aqui esta dni "+ getLongValueFromCell(row.getCell(3)));
                 pj.setDni(getLongValueFromCell(row.getCell(3)));
+                System.out.println("Aqui esta nombre "+ formatter.formatCellValue(row.getCell(4)));
                 pj.setNombres(formatter.formatCellValue(row.getCell(4)));
+                System.out.println("Aqui esta paterno "+ formatter.formatCellValue(row.getCell(5)));
                 pj.setApellidoPaterno(formatter.formatCellValue(row.getCell(5)));
+                System.out.println("Aqui esta materno "+ formatter.formatCellValue(row.getCell(6)));
                 pj.setApellidoMaterno(formatter.formatCellValue(row.getCell(6)));
+                System.out.println("Aqui esta experiencia "+ getNumberValue(row.getCell(7), Integer.class, 0));
                 pj.setExperienciaLaboral(getNumberValue(row.getCell(7), Integer.class, 0));
-                pj.setDepartamentos(formatter.formatCellValue(row.getCell(8)));
-                pj.setProvincia(formatter.formatCellValue(row.getCell(9)));
-                pj.setDistrito(formatter.formatCellValue(row.getCell(10)));
-                pj.setCarreraProfesional(formatter.formatCellValue(row.getCell(11)));
-                pj.setRazonSocial(formatter.formatCellValue(row.getCell(12)));
-                pj.setWeb(formatter.formatCellValue(row.getCell(13)));
-                pj.setGenero(Integer.valueOf(formatter.formatCellValue(row.getCell(14))));
-                pj.setNivelAcademico(Integer.valueOf(formatter.formatCellValue(row.getCell(15))));
-                pj.setCadenaProductiva(getNumberValue(row.getCell(16), Integer.class, 1));
-                pj.setSector(getNumberValue(row.getCell(17), Integer.class,1));
-                pj.setEspecialidad(getNumberValue(row.getCell(18), Integer.class,1));
-                pj.setDireccion(formatter.formatCellValue(row.getCell(19)));
-                pj.setTipoProveedor(Integer.valueOf(formatter.formatCellValue(row.getCell(20))));
-                pj.setDepartamento(getNumberValue(row.getCell(21), Integer.class,1 ));
+                System.out.println("Aqui esta prinvincia "+ formatter.formatCellValue(row.getCell(8)));
+                pj.setProvincia(formatter.formatCellValue(row.getCell(8)));
+                System.out.println("Aqui esta Distrito "+ formatter.formatCellValue(row.getCell(9)));
+                pj.setDistrito(formatter.formatCellValue(row.getCell(9)));
+                System.out.println("Aqui esta carrera profe "+ formatter.formatCellValue(row.getCell(10)));
+                pj.setCarreraProfesional(formatter.formatCellValue(row.getCell(10)));
+                System.out.println("Aqui esta razonsocial "+ formatter.formatCellValue(row.getCell(11)));
+                pj.setRazonSocial(formatter.formatCellValue(row.getCell(11)));
+                System.out.println("Aqui esta web"+formatter.formatCellValue(row.getCell(12)));
+                pj.setWeb(formatter.formatCellValue(row.getCell(12)));
+                pj.setGenero(Integer.valueOf(formatter.formatCellValue(row.getCell(13))));
+                pj.setNivelAcademico(Integer.valueOf(formatter.formatCellValue(row.getCell(14))));
+                pj.setCadenaProductiva(getNumberValue(row.getCell(15), Integer.class, 1));
+                pj.setSector(getNumberValue(row.getCell(16), Integer.class,1));
+                pj.setEspecialidad(getNumberValue(row.getCell(17), Integer.class,1));
+                pj.setDireccion(formatter.formatCellValue(row.getCell(18)));
+                pj.setIdTipoProveedor(Integer.valueOf(formatter.formatCellValue(row.getCell(19))));
+                pj.setDepartamento(getNumberValue(row.getCell(20), Integer.class,1 ));
+                pj.setIdTipoPersona(Integer.valueOf(formatter.formatCellValue(row.getCell(21))));
+                pj.setServicio(Integer.valueOf(formatter.formatCellValue(row.getCell(22))));
+
+
 
                 RegistroDTO registro = new RegistroDTO();
                 registro.setUsuario(usuario);

@@ -42,14 +42,17 @@ public class PersonaJuridica {
     private Integer sector;
     @JsonProperty("direccion")
     private String direccion;
-    @JsonProperty("tipoProveedor")
-    private Integer tipoProveedor;
+    @JsonProperty("idTipoProveedor")
+    private Integer idTipoProveedor;
     @JsonProperty("departamento")
     private Integer departamento;
     @JsonProperty("servicio")
     private Integer servicio;
     @JsonProperty("especialidad")
     private Integer especialidad;
+    @JsonProperty("idTipoPersona")
+    private Integer idTipoPersona;
+
 
 
 }

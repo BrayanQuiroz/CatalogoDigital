@@ -77,9 +77,9 @@ public class UsuarioController {
     public ResponseEntity<?> registrar(
             @RequestPart("usuario") UsuarioDTO usuarioDTO,
             @RequestPart("personaJuridica") PersonaJuridicaDTO personaJuridicaDTO,
-            @RequestParam("pdfCV") MultipartFile pdfCV,
+            @RequestParam(name = "pdfCV", required = false) MultipartFile pdfCV,
             @RequestParam(value = "pdfAutorizacion", required = false) MultipartFile pdfAutorizacion,
-            @RequestParam("pdfCertificado") MultipartFile pdfCertificado,
+            @RequestParam( value = "pdfCertificado", required = false) MultipartFile pdfCertificado,
             @RequestParam("imagen") MultipartFile imagen,
             @RequestParam(value ="pdfFichaRuc", required = false) MultipartFile pdfFichaRuc
     ) throws Exception {
@@ -87,6 +87,7 @@ public class UsuarioController {
                 pdfCertificado, imagen,pdfFichaRuc);
         return ResponseEntity.ok().body("Registro completado con éxito.");
     }
+
 
     @GetMapping("/usuarios")
     public ResponseEntity<?> getUsuarios() {
@@ -145,6 +146,7 @@ public class UsuarioController {
                         response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
                         response.put("idServicio", servicio.getId());
+                        response.put("flagimagen",personaJuridica.getFlagimagen());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());
@@ -186,11 +188,16 @@ public class UsuarioController {
         CadenaProductiva cadenaProductiva = cadenaProductivaService
                 .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
         Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
-        TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
-        TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
-        NivelAcademico nivelAcademico = nivelAcademicoService.getNivelAcademico(personaJuridica.getTipoPersona().getId());
-        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getSector().getCodSector());
-        Departamento departamento = departamentoService.getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
+        TipoPersona tipoPersona = tipoPersonService
+                .getTipoPersona(personaJuridica.getTipoPersona().getId());
+        TipoProveedor proveedor = tipoProveedorService
+                .getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+        NivelAcademico nivelAcademico = nivelAcademicoService
+                .getNivelAcademico(personaJuridica.getNivelAcademico().getId());
+        Sector sector = sectorService
+                .getSectorByCodSector(personaJuridica.getSector().getCodSector());
+        Departamento departamento = departamentoService
+                .getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
         Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
 
         Especialidad especialidad = especialidadServicie.getEspecialidad(personaJuridica.getEspecialidad().getId());
@@ -217,6 +224,7 @@ public class UsuarioController {
         response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
         response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
         response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+        response.put("flagimagen",personaJuridica.getFlagimagen());
         response.put("idEspecialidad", especialidad.getId());
         response.put("especialidad", especialidad.getDescripcion());
         response.put("idSector", sector.getCodSector());
@@ -325,6 +333,7 @@ public class UsuarioController {
                         response.put("especialidad", especialidad.getDescripcion());
                         response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("flagimagen",personaJuridica.getFlagimagen());
                         response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
@@ -410,6 +419,7 @@ public class UsuarioController {
                         response.put("especialidad", especialidad.getDescripcion());
                         response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
+                        response.put("flagimagen",personaJuridica.getFlagimagen());
                         response.put("idServicio", servicio.getId());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
@@ -494,6 +504,7 @@ public class UsuarioController {
                         response.put("idSector", sector.getCodSector());
                         response.put("sector", sector.getDescripcion());
                         response.put("idServicio", servicio.getId());
+                        response.put("flagimagen",personaJuridica.getFlagimagen());
                         response.put("servicioTitulo", servicio.getTitulo());
                         response.put("servicioDescrip", servicio.getDescripcion());
                         response.put("direccion", personaJuridica.getDireccion());

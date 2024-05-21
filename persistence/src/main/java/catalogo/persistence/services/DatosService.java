@@ -80,54 +80,65 @@ public class DatosService {
     }
 
     private PersonaJuridica convertirPersonaJuridica(PersonaJuridicaDTO personaJuridicaDTO) {
+
         PersonaJuridica personaJuridica = new PersonaJuridica();
-
-
-        Departamento departamento = departamentoRepository
-                .findDepartamentoByCodDep(personaJuridicaDTO.getDepartamento());
-
-        CadenaProductiva cadenaProductiva = cadenaProductivaRepository
-                .findCadenaProductivaByCodcadprod(personaJuridicaDTO.getCadenaProductiva());
-
-        Servicio servicio = servicioService
-                .getServicioByCodServicio(personaJuridicaDTO.getServicio());
-
-        Sector sector = sectorRepository
-                .findSectorByCodSector(personaJuridicaDTO.getSector());
-
-        System.out.println(personaJuridicaDTO.getSector());
-        System.out.println(personaJuridicaDTO.getServicio());
-        System.out.println(personaJuridicaDTO.getCadenaProductiva());
 
         personaJuridica.setRuc(personaJuridicaDTO.getRuc());
         personaJuridica.setApellidoMaterno(personaJuridicaDTO.getApellidoMaterno());
         personaJuridica.setApellidoPaterno(personaJuridicaDTO.getApellidoPaterno());
         personaJuridica.setNombres(personaJuridicaDTO.getNombres());
-
         personaJuridica.setCarreraProfesional(personaJuridicaDTO.getCarreraProfesional());
         personaJuridica.setExperienciaLaboral(personaJuridicaDTO.getExperienciaLaboral());
         personaJuridica.setRazonSocial(personaJuridicaDTO.getRazonSocial());
-
         personaJuridica.setWebsite(personaJuridicaDTO.getWebsite());
+        personaJuridica.setDireccion(personaJuridicaDTO.getDireccion());
+        personaJuridica.setDistrito(personaJuridicaDTO.getDistrito());
+        personaJuridica.setProvincia(personaJuridicaDTO.getProvincia());
+        personaJuridica.setDni(personaJuridicaDTO.getDni());
 
-        personaJuridica.setDepartamento(departamento);
-        personaJuridica.setCadenaProductiva(cadenaProductiva);
-        personaJuridica.setServicio(servicio);
+
+        Sector sector = new Sector();
+        sector.setCodSector(personaJuridicaDTO.getSector());
         personaJuridica.setSector(sector);
 
-        personaJuridica.setFechreg(new Timestamp(System.currentTimeMillis()));
+        System.out.println("Aqui es el valor de lo que llega"+personaJuridicaDTO.getSector());
 
+        Servicio servicio = new Servicio();
+        servicio.setId(personaJuridicaDTO.getServicio());
+        personaJuridica.setServicio(servicio);
 
+        Genero genero = new Genero();
+        genero.setId(personaJuridicaDTO.getGenero());
+        personaJuridica.setGenero(genero);
 
-        TipoPersona tipoPersona = new TipoPersona();
-        tipoPersona.setId(1);
-        personaJuridica.setTipoPersona(tipoPersona);
+        NivelAcademico nivelAcademico = new NivelAcademico();
+        nivelAcademico.setId(personaJuridicaDTO.getNivelAcademico());
+        personaJuridica.setNivelAcademico(nivelAcademico);
+
+        Especialidad especialidad = new Especialidad();
+        especialidad.setId(personaJuridicaDTO.getEspecialidad());
+        personaJuridica.setEspecialidad(especialidad);
+
+        Departamento departamento = new Departamento();
+        departamento.setCodDep(personaJuridicaDTO.getDepartamento());
+        personaJuridica.setDepartamento(departamento);
+
+        System.out.println("Aquí esta especialidad: "+personaJuridicaDTO.getEspecialidad());
+
+        CadenaProductiva cadenaProductiva = new CadenaProductiva();
+        cadenaProductiva.setCodcadprod(personaJuridicaDTO.getCadenaProductiva());
+        personaJuridica.setCadenaProductiva(cadenaProductiva);
 
         TipoProveedor tipoProveedor = new TipoProveedor();
-        tipoProveedor.setId(2);
+        tipoProveedor.setId(personaJuridicaDTO.getIdTipoProveedor());
+        personaJuridica.setTipoProveedor(tipoProveedor);
+
+        TipoPersona tipoPersona = new TipoPersona();
+        tipoPersona.setId(personaJuridicaDTO.getIdTipoPersona());
+        personaJuridica.setTipoPersona(tipoPersona);
 
 
-
+        personaJuridica.setFlagimagen((short)0);
         personaJuridica.setActivo(1);
         personaJuridica.setHabido(1);
         personaJuridica.setFlagUpdate((short) 0);

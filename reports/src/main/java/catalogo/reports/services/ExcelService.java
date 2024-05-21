@@ -67,6 +67,8 @@ public class ExcelService {
                 row.createCell(18).setCellValue(dato.getDireccion());
                 row.createCell(19).setCellValue(dato.getTipoProveedor());
                 row.createCell(20).setCellValue(dato.getDepartamento());
+                row.createCell(21).setCellValue(dato.getTipoPersona());
+                row.createCell(21).setCellValue(dato.getServicio());
             }
 
             workbook.write(out);

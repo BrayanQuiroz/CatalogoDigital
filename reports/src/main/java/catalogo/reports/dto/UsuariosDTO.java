@@ -49,4 +49,8 @@ public class UsuariosDTO {
     private Integer departamento;
     @JsonProperty("especialidad")
     private Integer especialidad;
+    @JsonProperty("TipoPersona")
+    private Integer TipoPersona;
+    @JsonProperty("servicio")
+    private Integer servicio;
 }
