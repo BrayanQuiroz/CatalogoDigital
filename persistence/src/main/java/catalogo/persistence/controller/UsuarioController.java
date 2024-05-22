@@ -29,49 +29,48 @@ public class UsuarioController {
 
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 
-    @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
-    private PersonaJuridicaService personaJuridicaService;
-    @Autowired
-    private UpdateStateService updateStateService;
+    private final UsuarioService usuarioService;
+    private final PersonaJuridicaService personaJuridicaService;
+    private final UpdateStateService updateStateService;
+    private final CadenaProductivaService cadenaProductivaService;
+    private final SectorService sectorService;
+    private final DepartamentoService departamentoService;
+    private final ServicioService servicioService;
+    private final RegistroService registroService;
+    private final GeneroService generoService;
+    private final TipoPersonService tipoPersonService;
+    private final TipoProveedorService tipoProveedorService;
+    private final NivelAcademicoService nivelAcademicoService;
+    private final EspecialidadServicie especialidadServicie;
 
-
-    private final UpdateProveedorService updateProveedorService;
-
-    @Autowired
-    private CadenaProductivaService cadenaProductivaService;
-
-    @Autowired
-    private SectorService sectorService;
-
-    @Autowired
-    private DepartamentoService departamentoService;
-    @Autowired
-    private ServicioService servicioService;
-
-
-    @Autowired
-    private RegistroService registroService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Autowired
-    private PersonaJuridicaRepository personaJuridicaRepository;
-    @Autowired
-    private GeneroService generoService;
-    @Autowired
-    private TipoPersonService tipoPersonService;
-    @Autowired
-    private TipoProveedorService tipoProveedorService;
-    @Autowired
-    private NivelAcademicoService nivelAcademicoService;
-    @Autowired
-    private EspecialidadServicie especialidadServicie;
-
-    public UsuarioController(UpdateProveedorService updateProveedorService) {
-        this.updateProveedorService = updateProveedorService;
+    public UsuarioController(UsuarioService usuarioService,
+                             PersonaJuridicaService personaJuridicaService,
+                             UpdateStateService updateStateService,
+                             CadenaProductivaService cadenaProductivaService,
+                             SectorService sectorService,
+                             DepartamentoService departamentoService,
+                             ServicioService servicioService,
+                             RegistroService registroService,
+                             GeneroService generoService,
+                             TipoPersonService tipoPersonService,
+                             TipoProveedorService tipoProveedorService,
+                             NivelAcademicoService nivelAcademicoService,
+                             EspecialidadServicie especialidadServicie) {
+        this.usuarioService = usuarioService;
+        this.personaJuridicaService = personaJuridicaService;
+        this.updateStateService = updateStateService;
+        this.cadenaProductivaService = cadenaProductivaService;
+        this.sectorService = sectorService;
+        this.departamentoService = departamentoService;
+        this.servicioService = servicioService;
+        this.registroService = registroService;
+        this.generoService = generoService;
+        this.tipoPersonService = tipoPersonService;
+        this.tipoProveedorService = tipoProveedorService;
+        this.nivelAcademicoService = nivelAcademicoService;
+        this.especialidadServicie = especialidadServicie;
     }
+
 
     @PostMapping(value = "/registro", consumes = "multipart/form-data")
     public ResponseEntity<?> registrar(
@@ -87,6 +86,7 @@ public class UsuarioController {
                 pdfCertificado, imagen,pdfFichaRuc);
         return ResponseEntity.ok().body("Registro completado con éxito.");
     }
+
 
     @GetMapping("/usuarios")
     public ResponseEntity<?> getUsuarios() {

@@ -6,12 +6,14 @@ import catalogo.persistence.models.*;
 import catalogo.persistence.repositories.PersonaJuridicaRepository;
 import catalogo.persistence.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +57,7 @@ public class RegistroService {
         Usuario usuarioExiste = usuarioRepository.findByRuc(Long.parseLong(String.valueOf(usuarioDTO.getRuc())));
 
         if(usuarioExiste != null){
-            throw new Exception("El RUC "+ usuarioDTO.getRuc() + " ya se encuentra registrado");
+            throw new ResponseStatusException(HttpStatus.LENGTH_REQUIRED, "El RUC " + usuarioDTO.getRuc() + " ya se encuentra registrado");
         }
 
         String passwordGenerate = "itp2024$";

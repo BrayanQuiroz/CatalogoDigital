@@ -36,5 +36,5 @@ password:
 users:
   creation: 20131369477
 server:
-  address: 11.38.80.21
+#  address: 11.38.80.21
   port: 9000
