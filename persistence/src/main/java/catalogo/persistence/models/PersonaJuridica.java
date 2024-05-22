@@ -66,7 +66,7 @@ public class PersonaJuridica {
     @JoinColumn(name = "i_codespecialidad")
     private Especialidad especialidad;
 
-    @Column(name = "v_razonsocial", nullable = false, length = 80)
+    @Column(name = "v_razonsocial", length = 80)
     private String razonSocial;
 
     @Column(name = "v_carreraprofe", length = 50)
@@ -125,6 +125,9 @@ public class PersonaJuridica {
 
     @Column(name = "s_flagestado", nullable = false)
     private Short flagEstado;
+
+    @Column(name = "s_flagimagen")
+    private Short flagimagen;
 
     @Column(name = "s_flagupdate", nullable = false)
     private Short flagUpdate;

@@ -19,16 +19,18 @@ public class PersonaJuridicaDTO {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private Date fechaNacimiento;
-    private Integer tipoProveedor;
-    private Integer tipoPersona;
+    private Integer idTipoProveedor;
+    private Integer idTipoPersona;
     private Integer genero;
     private Integer NivelAcademico;
     private String carreraProfesional;
+    private Integer especialidad;
     private Short experienciaLaboral;
     private String website;
     private Integer departamento;
     private Integer cadenaProductiva;
     private Integer sector;
     private Integer servicio;
+    private Short flagimagen;
 
 }

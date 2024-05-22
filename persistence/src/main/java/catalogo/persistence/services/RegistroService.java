@@ -3,8 +3,7 @@ package catalogo.persistence.services;
 import catalogo.persistence.dto.PersonaJuridicaDTO;
 import catalogo.persistence.dto.UsuarioDTO;
 import catalogo.persistence.models.*;
-import catalogo.persistence.repositories.PersonaJuridicaRepository;
-import catalogo.persistence.repositories.UsuarioRepository;
+import catalogo.persistence.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -30,6 +29,11 @@ public class RegistroService {
     private final UsuarioRepository usuarioRepository;
 
     private final PersonaJuridicaRepository personaJuridicaRepository;
+    private final DepartamentoService departamentoService;
+    private final DepartamentoRepository departamentoRepository;
+    private final CadenaProductivaRepository cadenaProductivaRepository;
+    private final ServiciosRepository serviciosRepository;
+    private final SectorRepository sectorRepository;
 
     //Se agrega final para la inmutabilidad
     private SendEmailService sendEmailService;
@@ -37,11 +41,16 @@ public class RegistroService {
     @Autowired
     public RegistroService(UsuarioRepository usuarioRepository,
                            PersonaJuridicaRepository personaJuridicaRepository,
-                           SendEmailService sendEmailService){
+                           SendEmailService sendEmailService, DepartamentoService departamentoService, DepartamentoRepository departamentoRepository, CadenaProductivaRepository cadenaProductivaRepository, ServiciosRepository serviciosRepository, SectorRepository sectorRepository){
 
         this.usuarioRepository = usuarioRepository;
         this.personaJuridicaRepository = personaJuridicaRepository;
         this.sendEmailService = sendEmailService;
+        this.departamentoService = departamentoService;
+        this.departamentoRepository = departamentoRepository;
+        this.cadenaProductivaRepository = cadenaProductivaRepository;
+        this.serviciosRepository = serviciosRepository;
+        this.sectorRepository = sectorRepository;
     }
 
 
@@ -64,7 +73,6 @@ public class RegistroService {
         String hashedPassword = BCrypt.hashpw(passwordGenerate, BCrypt.gensalt(10));
         System.out.println("Hashed: " + hashedPassword);
 
-// Verificar la contraseña
         boolean match = BCrypt.checkpw(passwordGenerate, hashedPassword);
         System.out.println("Match: " + match);
 
@@ -80,6 +88,7 @@ public class RegistroService {
         usuario.setFechreg(new Timestamp(System.currentTimeMillis()));
 
         PersonaJuridica personaJuridica = new PersonaJuridica();
+
         personaJuridica.setRuc(personaJuridicaDTO.getRuc());
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
 
@@ -97,58 +106,91 @@ public class RegistroService {
         personaJuridica.setDireccion(personaJuridicaDTO.getDireccion());
         personaJuridica.setDistrito(personaJuridicaDTO.getDistrito());
         personaJuridica.setProvincia(personaJuridicaDTO.getProvincia());
+        personaJuridica.setFechaNacimiento(personaJuridicaDTO.getFechaNacimiento());
+        personaJuridica.setCarreraProfesional(personaJuridicaDTO.getCarreraProfesional());
+        personaJuridica.setFlagimagen(personaJuridicaDTO.getFlagimagen());
+
+        System.out.println("Aqui es el valor de lo que llega de imagenflag"+ personaJuridicaDTO.getFlagimagen());
 
         personaJuridica.setDni(personaJuridicaDTO.getDni());
         personaJuridica.setFechreg(new Timestamp(System.currentTimeMillis()));
         personaJuridica.setUsureg(String.valueOf(personaJuridicaDTO.getRuc()));
-
-        Departamento departamento = new Departamento();
-        departamento.setCodDep(1);
-        personaJuridica.setDepartamento(departamento);
-
-        CadenaProductiva cadenaProductiva = new CadenaProductiva();
-        cadenaProductiva.setCodcadprod(1);
-        personaJuridica.setCadenaProductiva(cadenaProductiva);
-
-        Servicio servicio = new Servicio();
-        servicio.setId(1);
-        personaJuridica.setServicio(servicio);
-
-        Sector sector = new Sector();
-        sector.setCodSector(1);
-        personaJuridica.setSector(sector);
 
         personaJuridica.setActivo(1);
         personaJuridica.setHabido(1);
         personaJuridica.setFlagUpdate((short) 0);
         personaJuridica.setFlagEstado((short)1);
 
+        Sector sector = new Sector();
+        sector.setCodSector(personaJuridicaDTO.getSector());
+        personaJuridica.setSector(sector);
+
+
+
+        Servicio servicio = new Servicio();
+        servicio.setId(personaJuridicaDTO.getServicio());
+        personaJuridica.setServicio(servicio);
+
+        Genero genero = new Genero();
+        genero.setId(personaJuridicaDTO.getGenero());
+        personaJuridica.setGenero(genero);
+
+        NivelAcademico nivelAcademico = new NivelAcademico();
+        nivelAcademico.setId(personaJuridicaDTO.getNivelAcademico());
+        personaJuridica.setNivelAcademico(nivelAcademico);
+
+        Especialidad especialidad = new Especialidad();
+        especialidad.setId(personaJuridicaDTO.getEspecialidad());
+        personaJuridica.setEspecialidad(especialidad);
+
+        Departamento departamento = new Departamento();
+        departamento.setCodDep(personaJuridicaDTO.getDepartamento());
+        personaJuridica.setDepartamento(departamento);
+
+
+
+        CadenaProductiva cadenaProductiva = new CadenaProductiva();
+        cadenaProductiva.setCodcadprod(personaJuridicaDTO.getCadenaProductiva());
+        personaJuridica.setCadenaProductiva(cadenaProductiva);
+
+        TipoProveedor tipoProveedor = new TipoProveedor();
+        tipoProveedor.setId(personaJuridicaDTO.getIdTipoProveedor());
+        personaJuridica.setTipoProveedor(tipoProveedor);
+
+        TipoPersona tipoPersona = new TipoPersona();
+        tipoPersona.setId(personaJuridicaDTO.getIdTipoPersona());
+        personaJuridica.setTipoPersona(tipoPersona);
+
+
+
+        personaJuridica.setUsuario(usuario);
+        personaJuridicaRepository.save(personaJuridica);
+
+        sendEmailService.SendEmail(usuarioDTO.getCorreo(), usuarioDTO.getRuc(), usuarioDTO.getPassword(),
+                personaJuridicaDTO.getRazonSocial());
+
         if (usuario.getCodUsuario() == null) {
             throw new Exception("Fallo al guardar el usuario.");
         }
 
         if (pdfCV != null && !pdfCV.isEmpty()) {
-            saveDocument(pdfCV, String.valueOf(usuarioDTO.getRuc()), 1);
+            saveDocument(pdfCV, String.valueOf(usuarioDTO.getRuc()), 3);
         }
         if (pdfAutorizacion != null && !pdfAutorizacion.isEmpty()) {
-            saveDocument(pdfAutorizacion, String.valueOf(usuarioDTO.getRuc()), 2);
+            saveDocument(pdfAutorizacion, String.valueOf(usuarioDTO.getRuc()), 1);
         }
         if (pdfCertificado != null && !pdfCertificado.isEmpty()) {
-            saveDocument(pdfCertificado, String.valueOf(usuarioDTO.getRuc()), 3);
+            saveDocument(pdfCertificado, String.valueOf(usuarioDTO.getRuc()), 2);
         }
         if (imagen != null && !imagen.isEmpty()) {
             saveDocument(imagen, String.valueOf(usuarioDTO.getRuc()), 4);
         }
 
         if (pdfFichaRuc != null && !pdfFichaRuc.isEmpty()) {
-            saveDocument(pdfFichaRuc, String.valueOf(usuarioDTO.getRuc()), 4);
+            saveDocument(pdfFichaRuc, String.valueOf(usuarioDTO.getRuc()), 5);
         }
 
-        personaJuridica.setUsuario(usuario);
-        personaJuridicaRepository.save(personaJuridica);
 
-        sendEmailService.SendEmail(usuarioDTO.getCorreo(), usuarioDTO.getRuc(), usuarioDTO.getPassword(),
-                                    personaJuridicaDTO.getRazonSocial());
 
     }
 
@@ -192,14 +234,21 @@ public class RegistroService {
             throw new IOException("No se pudo crear el directorio de certificados en: " + FichaDirectory.getAbsolutePath());
         }
 
+
+
+//        String directoryPath = "/opt/data/autorizacion/";
+//        String directoryPathTwo = "/opt/data/cul/";
+//        String directoryPathThree = "/opt/data/cv/";
+//        String directoryPathFour = "/opt/data/imagenes/";
+//        String directoryPathFive = "/opt/data/fichaRuc/";
         Path path;
         switch (tipo) {
             case 1: // Currículum
-                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
+                 path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
 
                 break;
             case 2: // Certificado
-                path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
+                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
                 break;
             case 3:
                 path = Paths.get(directoryPathThree, ruc + "-cv.pdf");
