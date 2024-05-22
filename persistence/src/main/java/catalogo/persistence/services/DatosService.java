@@ -136,8 +136,6 @@ public class DatosService {
         TipoPersona tipoPersona = new TipoPersona();
         tipoPersona.setId(personaJuridicaDTO.getIdTipoPersona());
         personaJuridica.setTipoPersona(tipoPersona);
-
-
         personaJuridica.setFlagimagen((short)0);
         personaJuridica.setActivo(1);
         personaJuridica.setHabido(1);

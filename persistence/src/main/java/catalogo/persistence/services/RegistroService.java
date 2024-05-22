@@ -71,7 +71,6 @@ public class RegistroService {
         String hashedPassword = BCrypt.hashpw(passwordGenerate, BCrypt.gensalt(10));
         System.out.println("Hashed: " + hashedPassword);
 
-// Verificar la contraseña
         boolean match = BCrypt.checkpw(passwordGenerate, hashedPassword);
         System.out.println("Match: " + match);
 
@@ -105,44 +104,26 @@ public class RegistroService {
         personaJuridica.setDireccion(personaJuridicaDTO.getDireccion());
         personaJuridica.setDistrito(personaJuridicaDTO.getDistrito());
         personaJuridica.setProvincia(personaJuridicaDTO.getProvincia());
+        personaJuridica.setFechaNacimiento(personaJuridicaDTO.getFechaNacimiento());
+        personaJuridica.setCarreraProfesional(personaJuridicaDTO.getCarreraProfesional());
+        personaJuridica.setFlagimagen(personaJuridicaDTO.getFlagimagen());
+
+        System.out.println("Aqui es el valor de lo que llega de imagenflag"+ personaJuridicaDTO.getFlagimagen());
 
         personaJuridica.setDni(personaJuridicaDTO.getDni());
         personaJuridica.setFechreg(new Timestamp(System.currentTimeMillis()));
         personaJuridica.setUsureg(String.valueOf(personaJuridicaDTO.getRuc()));
-
-
 
         personaJuridica.setActivo(1);
         personaJuridica.setHabido(1);
         personaJuridica.setFlagUpdate((short) 0);
         personaJuridica.setFlagEstado((short)1);
 
-        if (usuario.getCodUsuario() == null) {
-            throw new Exception("Fallo al guardar el usuario.");
-        }
-
-        if (pdfCV != null && !pdfCV.isEmpty()) {
-            saveDocument(pdfCV, String.valueOf(usuarioDTO.getRuc()), 1);
-        }
-        if (pdfAutorizacion != null && !pdfAutorizacion.isEmpty()) {
-            saveDocument(pdfAutorizacion, String.valueOf(usuarioDTO.getRuc()), 2);
-        }
-        if (pdfCertificado != null && !pdfCertificado.isEmpty()) {
-            saveDocument(pdfCertificado, String.valueOf(usuarioDTO.getRuc()), 3);
-        }
-        if (imagen != null && !imagen.isEmpty()) {
-            saveDocument(imagen, String.valueOf(usuarioDTO.getRuc()), 4);
-        }
-
-        if (pdfFichaRuc != null && !pdfFichaRuc.isEmpty()) {
-            saveDocument(pdfFichaRuc, String.valueOf(usuarioDTO.getRuc()), 5);
-        }
-
         Sector sector = new Sector();
         sector.setCodSector(personaJuridicaDTO.getSector());
         personaJuridica.setSector(sector);
 
-        System.out.println("Aqui es el valor de lo que llega"+personaJuridicaDTO.getSector());
+
 
         Servicio servicio = new Servicio();
         servicio.setId(personaJuridicaDTO.getServicio());
@@ -164,7 +145,7 @@ public class RegistroService {
         departamento.setCodDep(personaJuridicaDTO.getDepartamento());
         personaJuridica.setDepartamento(departamento);
 
-        System.out.println("Aquí esta especialidad: "+personaJuridicaDTO.getEspecialidad());
+
 
         CadenaProductiva cadenaProductiva = new CadenaProductiva();
         cadenaProductiva.setCodcadprod(personaJuridicaDTO.getCadenaProductiva());
@@ -179,11 +160,35 @@ public class RegistroService {
         personaJuridica.setTipoPersona(tipoPersona);
 
 
+
         personaJuridica.setUsuario(usuario);
         personaJuridicaRepository.save(personaJuridica);
 
         sendEmailService.SendEmail(usuarioDTO.getCorreo(), usuarioDTO.getRuc(), usuarioDTO.getPassword(),
-                                    personaJuridicaDTO.getRazonSocial());
+                personaJuridicaDTO.getRazonSocial());
+
+        if (usuario.getCodUsuario() == null) {
+            throw new Exception("Fallo al guardar el usuario.");
+        }
+
+        if (pdfCV != null && !pdfCV.isEmpty()) {
+            saveDocument(pdfCV, String.valueOf(usuarioDTO.getRuc()), 3);
+        }
+        if (pdfAutorizacion != null && !pdfAutorizacion.isEmpty()) {
+            saveDocument(pdfAutorizacion, String.valueOf(usuarioDTO.getRuc()), 1);
+        }
+        if (pdfCertificado != null && !pdfCertificado.isEmpty()) {
+            saveDocument(pdfCertificado, String.valueOf(usuarioDTO.getRuc()), 2);
+        }
+        if (imagen != null && !imagen.isEmpty()) {
+            saveDocument(imagen, String.valueOf(usuarioDTO.getRuc()), 4);
+        }
+
+        if (pdfFichaRuc != null && !pdfFichaRuc.isEmpty()) {
+            saveDocument(pdfFichaRuc, String.valueOf(usuarioDTO.getRuc()), 5);
+        }
+
+
 
     }
 
@@ -227,14 +232,21 @@ public class RegistroService {
             throw new IOException("No se pudo crear el directorio de certificados en: " + FichaDirectory.getAbsolutePath());
         }
 
+
+
+//        String directoryPath = "/opt/data/autorizacion/";
+//        String directoryPathTwo = "/opt/data/cul/";
+//        String directoryPathThree = "/opt/data/cv/";
+//        String directoryPathFour = "/opt/data/imagenes/";
+//        String directoryPathFive = "/opt/data/fichaRuc/";
         Path path;
         switch (tipo) {
             case 1: // Currículum
-                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
+                 path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
 
                 break;
             case 2: // Certificado
-                path = Paths.get(directoryPath, ruc + "-autorizacion.pdf");
+                path = Paths.get(directoryPathTwo, ruc + "-cul.pdf");
                 break;
             case 3:
                 path = Paths.get(directoryPathThree, ruc + "-cv.pdf");

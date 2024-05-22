@@ -3,9 +3,13 @@ spring:
     name: authentication
 
 server:
-#  address: 11.50.80.21
+  address: 11.50.80.21
   port: 9010
 
 logging:
   level:
     org.springframework.security: DEBUG
+
+persistence:
+    url: http://192.168.1.47:9000
+#  url: http://localhost:9000

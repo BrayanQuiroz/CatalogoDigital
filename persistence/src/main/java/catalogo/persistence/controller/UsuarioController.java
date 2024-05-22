@@ -211,8 +211,8 @@ public class UsuarioController {
         response.put("nombres", personaJuridica.getNombres());
         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+        response.put("dni", personaJuridica.getDni());
         response.put("idGenero", genero.getId());
-        response.put("password", usuario.getPassword());
         response.put("genero",  genero.getDescripcion());
         response.put("idTipoPersona",  tipoPersona.getId());
         response.put("TipoPersona",  tipoPersona.getDescripcion());
@@ -245,6 +245,91 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
 
     }
+
+
+    @GetMapping("/login/{ruc}")
+    public ResponseEntity<?> getLogin(@PathVariable Long ruc) {
+
+        Usuario usuario = usuarioService.getUsuarioByRuc(ruc);
+
+        if (usuario == null || usuario.getFlagEstado() != 1) {
+
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "No se encontró el usuario o el usuario no está activo");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+        PersonaJuridica personaJuridica = personaJuridicaService.getActivePJuridicaByCodUsuario(usuario);
+
+        if (personaJuridica == null) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "El usuario no está activo o actualizado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        CadenaProductiva cadenaProductiva = cadenaProductivaService
+                .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
+        Genero genero = generoService.getGeneroById(personaJuridica.getGenero().getId());
+        TipoPersona tipoPersona = tipoPersonService
+                .getTipoPersona(personaJuridica.getTipoPersona().getId());
+        TipoProveedor proveedor = tipoProveedorService
+                .getTipoProveedor(personaJuridica.getTipoProveedor().getId());
+        NivelAcademico nivelAcademico = nivelAcademicoService
+                .getNivelAcademico(personaJuridica.getNivelAcademico().getId());
+        Sector sector = sectorService
+                .getSectorByCodSector(personaJuridica.getSector().getCodSector());
+        Departamento departamento = departamentoService
+                .getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
+        Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
+
+        Especialidad especialidad = especialidadServicie.getEspecialidad(personaJuridica.getEspecialidad().getId());
+
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("ruc", usuario.getRuc());
+        response.put("correo", usuario.getCorreo());
+        response.put("tipoUsuario", usuario.getTipoUsuario().getDesTipoUsu());
+        response.put("razonSocial", personaJuridica.getRazonSocial());
+        response.put("nombres", personaJuridica.getNombres());
+        response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
+        response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+        response.put("password", usuario.getPassword());
+        response.put("dni", personaJuridica.getDni());
+        response.put("idGenero", genero.getId());
+        response.put("genero",  genero.getDescripcion());
+        response.put("idTipoPersona",  tipoPersona.getId());
+        response.put("TipoPersona",  tipoPersona.getDescripcion());
+        response.put("idTipoProveedor",  proveedor.getId());
+        response.put("TipoProveedor",  proveedor.getDescripcion());
+        response.put("idNivelAcademico",  nivelAcademico.getId());
+        response.put("nivelAcademico",  nivelAcademico.getDescripcion());
+        response.put("fechaNacimiento", personaJuridica.getFechaNacimiento());
+        response.put("experienciaLaboral", personaJuridica.getExperienciaLaboral());
+        response.put("idCadenaProductiva", cadenaProductiva.getCodcadprod());
+        response.put("cadenaProductiva", cadenaProductiva.getDescadprod());
+        response.put("flagimagen",personaJuridica.getFlagimagen());
+        response.put("idEspecialidad", especialidad.getId());
+        response.put("especialidad", especialidad.getDescripcion());
+        response.put("idSector", sector.getCodSector());
+        response.put("sector", sector.getDescripcion());
+        response.put("idServicio", servicio.getId());
+        response.put("servicioTitulo", servicio.getTitulo());
+        response.put("servicioDescrip", servicio.getDescripcion());
+        response.put("direccion", personaJuridica.getDireccion());
+        response.put("provincia", personaJuridica.getProvincia());
+        response.put("distrito", personaJuridica.getDistrito());
+        response.put("departamento", departamento.getDescripcion());
+        response.put("idDepartamento", departamento.getCodDep());
+        response.put("flagestado", personaJuridica.getFlagEstado());
+        response.put("flagUpdate", personaJuridica.getFlagUpdate());
+        response.put("web", personaJuridica.getWebsite());
+        response.put("pathImagen", "https://dcatalogodigital.itp.gob.pe/media/" + usuario.getRuc() + ".png");
+
+        return ResponseEntity.ok(response);
+
+    }
+
+
 
     @PutMapping("/ActualizarEstado")
     public ResponseEntity<?> updateState(@RequestBody UpdateStateDTO updateStateDTO) {

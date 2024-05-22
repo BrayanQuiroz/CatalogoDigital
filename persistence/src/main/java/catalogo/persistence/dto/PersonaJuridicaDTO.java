@@ -31,5 +31,6 @@ public class PersonaJuridicaDTO {
     private Integer cadenaProductiva;
     private Integer sector;
     private Integer servicio;
+    private Short flagimagen;
 
 }

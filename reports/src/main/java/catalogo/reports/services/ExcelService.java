@@ -34,9 +34,9 @@ public class ExcelService {
             Sheet sheet = workbook.createSheet("Datos");
 
             String[] columnas = {
-                                "RUC","Correo","Razón social","DNI","Nombre", "Apellido Paterno",  "Apellido Materno", "Genero",
-                                "Departamento","Provincia", "Distrito", "Dirección","Experiencia laboral", "Carrera profesional",
-                                "Web","Nivel academico", "Cadena productiva", "Sector", "Especialidad","TipoProveedor","Región"
+                                "RUC","Correo","DNI","Nombre", "Apellido Paterno",  "Apellido Materno", "Experiencia laboral",
+                                "Departamento","Provincia", "Distrito", "Dirección", "Carrera profesional","Razón social",
+                                "Web","Genero", "Nivel academico", "Sector", "Especialidad","TipoProveedor","Región"
                                  };
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < columnas.length; i++) {
@@ -56,19 +56,19 @@ public class ExcelService {
                 row.createCell(7).setCellValue(dato.getDepartamentos());
                 row.createCell(8).setCellValue(dato.getProvincia());
                 row.createCell(9).setCellValue(dato.getDistrito());
-                row.createCell(10).setCellValue(dato.getCarreraProfesional());
-                row.createCell(11).setCellValue(dato.getRazonSocial());
-                row.createCell(12).setCellValue(dato.getWeb());
-                row.createCell(13).setCellValue(dato.getGenero());
-                row.createCell(14).setCellValue(dato.getNivelAcademico());
-                row.createCell(15).setCellValue(dato.getCadenaProductiva());
-                row.createCell(16).setCellValue(dato.getSector());
-                row.createCell(17).setCellValue(dato.getEspecialidad());
-                row.createCell(18).setCellValue(dato.getDireccion());
+                row.createCell(10).setCellValue(dato.getDireccion());
+                row.createCell(11).setCellValue(dato.getCarreraProfesional());
+                row.createCell(12).setCellValue(dato.getRazonSocial());
+                row.createCell(13).setCellValue(dato.getWeb());
+                row.createCell(14).setCellValue(dato.getGenero());
+                row.createCell(15).setCellValue(dato.getNivelAcademico());
+                row.createCell(16).setCellValue(dato.getCadenaProductiva());
+                row.createCell(17).setCellValue(dato.getSector());
+                row.createCell(18).setCellValue(dato.getEspecialidad());
                 row.createCell(19).setCellValue(dato.getTipoProveedor());
                 row.createCell(20).setCellValue(dato.getDepartamento());
                 row.createCell(21).setCellValue(dato.getTipoPersona());
-                row.createCell(21).setCellValue(dato.getServicio());
+                row.createCell(22).setCellValue(dato.getServicio());
             }
 
             workbook.write(out);
