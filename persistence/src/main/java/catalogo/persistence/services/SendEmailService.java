@@ -23,12 +23,15 @@ public class SendEmailService {
         this.templateEngine = templateEngine;
     }
 
+//    pr
+
     public void SendEmail(String destintario, Long ruc, String password, String razonSocial){
 
         Context context = new Context();
         context.setVariable("ruc", ruc);
         context.setVariable("password", password);
         context.setVariable("razonSocial", razonSocial);
+        context.setVariable("correo", "${variables.correo}");
         String contentHtml = templateEngine.process("Bienvenida-email.html", context);
 
         try {

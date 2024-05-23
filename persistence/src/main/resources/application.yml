@@ -33,6 +33,9 @@ logging:
 password:
   generator: itp2024$
 
+variables:
+  correo: catalogoproveedores@itp.gob.pe
+
 users:
   creation: 20131369477
 server:
