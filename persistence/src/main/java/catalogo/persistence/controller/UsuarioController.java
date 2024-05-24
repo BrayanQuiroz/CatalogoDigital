@@ -114,7 +114,7 @@ public class UsuarioController {
                         TipoPersona tipoPersona = tipoPersonService.getTipoPersona(personaJuridica.getTipoPersona().getId());
                         TipoProveedor proveedor = tipoProveedorService.getTipoProveedor(personaJuridica.getTipoProveedor().getId());
                         NivelAcademico nivelAcademico = nivelAcademicoService.getNivelAcademico(personaJuridica.getTipoPersona().getId());
-                        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getServicio().getId());
+                        Sector sector = sectorService.getSectorByCodSector(personaJuridica.getSector().getCodSector());
                         Departamento departamento = departamentoService.getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
                         Servicio servicio = servicioService.getServicioByCodServicio(personaJuridica.getServicio().getId());
 
@@ -128,6 +128,7 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+                        response.put("dni", personaJuridica.getDni());
                         response.put("idGenero", genero.getId());
                         response.put("genero",  genero.getDescripcion());
                         response.put("idTipoPersona",  tipoPersona.getId());
@@ -345,13 +346,13 @@ public class UsuarioController {
             PersonaJuridica personaJuridica = updateStateService.updateEstado(ruc, flagUpdate, usumod);
             return ResponseEntity.ok("Estado actualizado correctamente.");
         } catch (EntityNotFoundException e) {
-            log.error("Error al actualizar el estado de la persona jurídica", e);
+            log.error("Error al actualizar el estado de la persona jurídica 1", e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Persona jurídica no encontrada con el RUC: " + updateStateDTO.getRuc());
+                    .body("Persona jurídica no encontrada con el RUC 2: " + updateStateDTO.getRuc());
         } catch (Exception e) {
             log.error("Error al actualizar el estado de la persona jurídica", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al actualizar el estado de la persona jurídica: " + e.getMessage());
+                    .body("Error al actualizar el estado de la persona jurídica 3: " + e.getMessage());
         }
     }
 
@@ -380,7 +381,7 @@ public class UsuarioController {
                         CadenaProductiva cadenaProductiva = cadenaProductivaService
                                 .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
                         Sector sector = sectorService
-                                .getSectorByCodSector(personaJuridica.getServicio().getId());
+                                .getSectorByCodSector(personaJuridica.getSector().getCodSector());
                         Departamento departamento = departamentoService
                                 .getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
                         Servicio servicio = servicioService
@@ -401,6 +402,7 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+                        response.put("dni", personaJuridica.getDni());
                         response.put("idGenero", genero.getId());
                         response.put("genero",  genero.getDescripcion());
                         response.put("idTipoPersona",  tipoPersona.getId());
@@ -464,7 +466,7 @@ public class UsuarioController {
                         CadenaProductiva cadenaProductiva = cadenaProductivaService
                                 .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
                         Sector sector = sectorService
-                                .getSectorByCodSector(personaJuridica.getServicio().getId());
+                                .getSectorByCodSector(personaJuridica.getSector().getCodSector());
                         Departamento departamento = departamentoService
                                 .getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
                         Servicio servicio = servicioService
@@ -487,6 +489,7 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+                        response.put("dni", personaJuridica.getDni());
                         response.put("idGenero", genero.getId());
                         response.put("genero",  genero.getDescripcion());
                         response.put("idTipoPersona",  tipoPersona.getId());
@@ -549,7 +552,7 @@ public class UsuarioController {
                         CadenaProductiva cadenaProductiva = cadenaProductivaService
                                 .getCadenaProductivaByCodCadProd(personaJuridica.getCadenaProductiva().getCodcadprod());
                         Sector sector = sectorService
-                                .getSectorByCodSector(personaJuridica.getServicio().getId());
+                                .getSectorByCodSector(personaJuridica.getSector().getCodSector());
                         Departamento departamento = departamentoService
                                 .getDepartamentoById(personaJuridica.getDepartamento().getCodDep());
                         Servicio servicio = servicioService
@@ -571,6 +574,7 @@ public class UsuarioController {
                         response.put("nombres", personaJuridica.getNombres());
                         response.put("apellidoPaterno", personaJuridica.getApellidoPaterno());
                         response.put("apellidoMaterno", personaJuridica.getApellidoMaterno());
+                        response.put("dni", personaJuridica.getDni());
                         response.put("idGenero", genero.getId());
                         response.put("genero",  genero.getDescripcion());
                         response.put("idTipoPersona",  tipoPersona.getId());
