@@ -54,7 +54,7 @@ public class DatosService {
         personaJuridicaRepository.save(personaJuridica);
 
         sendEmailService.SendEmail(datos.getUsuario().getCorreo(), datos.getUsuario().getRuc(),
-                datos.getUsuario().getPassword(), datos.getPersonaJuridica().getRazonSocial());
+                datos.getUsuario().getPassword(), datos.getPersonaJuridica().getRazonSocial(), 1);
     }
 
 

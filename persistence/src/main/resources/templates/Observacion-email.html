@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../static/css/styles.css" type="text/css">
+</head>
+<body>
+    <main style="    width:750px;
+    text-align: center; font-family: sans-serif;">
+        <div class="header">
+            <figure>
+
+            </figure>
+        </div>
+        <div>
+            <img
+                    src="https://dcatalogodigital.itp.gob.pe/media/logo_itp.png"
+                    style="margin-top: 10px;
+                             width:40%;
+
+                    data-bit:iit;"
+            />
+            <img
+                    src="https://dcatalogodigital.itp.gob.pe/media/logo_prored.png"
+                    style="margin-top: 10px"
+                    width="40%"
+                    class="CToWUd"
+                    data-bit="iit"
+            />
+
+            <div style="  width: 750px;
+    height: 5px;
+    background: #BF0000;"></div>
+            <div  style="text-align: center; width:750px">
+                <h1>¡Estimad@ <span th:text="${razonSocial}" >!</span></h1>
+                <h2 style="margin-bottom: 0">La información presentada ha sido observada en los siguientes términos:</h2>
+                <h2 style="margin-bottom: 0; margin-top: 0.5rem">Información académica.</h2>
+                <h2 style=" margin-top: 0.5rem; margin-bottom: 0">Experiencia laboral.</h2>
+                <h2 style=" margin-top: 0.5rem; margin-bottom: 0">Información tributario.</h2>
+                <h2 style=" margin-top: 0.5rem; margin-bottom: 0">Accede a catálogo con:</h2>
+                <h2 style=" margin-top: 0.5rem; margin-bottom: 0">Usuario: <span th:text="${ruc}"></span></h2>
+                <h2 style="margin-top: 0.5rem; margin-bottom: 0">Contraseña: <span>itp2024$</span></h2>
+                <p style=" margin-top: 1.3rem; margin-bottom: 0; font-size: 13px">Si tienes alguna duda, puedes
+                    comunicarte escribiéndonos a <a href="mailto:correopordefinir@itp.gob.pe">correopordefinir@itp.gob.pe</a>
+                </p>
+                <p style=" margin-top: 0.2rem; font-size: 13px;">Este correo ha sido enviado de forma automática,
+                    agradeceremos no responder a este correo.</p>
+            </div>
+            <div  style="    width: 750px;
+    height: 5px;
+    background: #BF0000;"></div>
+        </div>
+    </main>
+</body>
+</html>

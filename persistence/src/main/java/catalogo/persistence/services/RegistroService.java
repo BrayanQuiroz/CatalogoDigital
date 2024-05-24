@@ -167,7 +167,7 @@ public class RegistroService {
         personaJuridicaRepository.save(personaJuridica);
 
         sendEmailService.SendEmail(usuarioDTO.getCorreo(), usuarioDTO.getRuc(), usuarioDTO.getPassword(),
-                personaJuridicaDTO.getRazonSocial());
+                personaJuridicaDTO.getRazonSocial(), 1);
 
         if (usuario.getCodUsuario() == null) {
             throw new Exception("Fallo al guardar el usuario.");

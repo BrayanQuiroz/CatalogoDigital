@@ -4,6 +4,7 @@ import catalogo.persistence.dto.UsuarioDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,23 +24,46 @@ public class SendEmailService {
         this.templateEngine = templateEngine;
     }
 
-//    pr
+    @Value("${variables.correo}")
+    private String correo;
 
-    public void SendEmail(String destintario, Long ruc, String password, String razonSocial){
+    public void SendEmail(String destintario, Long ruc, String password, String razonSocial, int tipo){
 
         Context context = new Context();
         context.setVariable("ruc", ruc);
-        context.setVariable("password", password);
+
+        String passwordValud = (password != null && !password.isEmpty()) ? password : "";
+        context.setVariable("password", passwordValud);
         context.setVariable("razonSocial", razonSocial);
-        context.setVariable("correo", "${variables.correo}");
-        String contentHtml = templateEngine.process("Bienvenida-email.html", context);
+        context.setVariable("correo", correo);
+
+        String contentHtml = "";
+        String asunto = "";
+
+        switch (tipo) {
+            case 1 -> {
+                contentHtml = templateEngine.process("Bienvenida-email.html", context);
+                asunto = "Bienvenido/a a Catálogo de Proveedores";
+            }
+            case 2 -> {
+                templateEngine.process("Aprobado-email.html", context);
+                asunto = "Bienvenido/a a Catálogo de Proveedores";
+            }
+            case 3 -> {
+                templateEngine.process("Aprobado-email.html", context);
+                asunto = "Bienvenido/a a Catálogo de Proveedores";
+            }
+
+            default -> throw new IllegalArgumentException("Tipo de correo electrónico no válido");
+        };
+
 
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
             helper.setTo(destintario);
-            helper.setSubject("Bienvenido/a a Catálogo de Proveedores");
+            helper.setSubject(asunto);
             helper.setText(contentHtml, true);
 
             mailSender.send(mimeMessage);
