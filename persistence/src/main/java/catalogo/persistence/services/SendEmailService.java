@@ -50,7 +50,7 @@ public class SendEmailService {
                 asunto = "Bienvenido/a a Catálogo de Proveedores";
             }
             case 3 -> {
-                templateEngine.process("Aprobado-email.html", context);
+                templateEngine.process("Observado-email.html", context);
                 asunto = "Bienvenido/a a Catálogo de Proveedores";
             }
 
