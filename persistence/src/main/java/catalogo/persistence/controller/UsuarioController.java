@@ -631,6 +631,12 @@ public class UsuarioController {
 //        }
 //    }
 
+
+    @GetMapping("/count/")
+    public Integer CountProveedores(){
+        return Math.toIntExact(usuarioService.obtenerCantidadProveedores());
+    }
+
 }
 
 

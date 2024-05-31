@@ -37,4 +37,9 @@ public class UsuarioService {
     public void saveUsuario(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
+
+    public Long obtenerCantidadProveedores(){
+        return usuarioRepository.countUsuariosByTipo();
+    }
+
 }
