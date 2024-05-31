@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class UpdateProveedorDTO {
-
     private Integer usuario;
     private String celular;
     private String correo;
