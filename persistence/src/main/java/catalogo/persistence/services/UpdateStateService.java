@@ -49,9 +49,9 @@ public class UpdateStateService {
                     return personaJuridicaRepository.save(personaJuridica);
                 }
 
-                case 3 ->{
-
-                }
+//                case 3 ->{
+//
+//                }
 
                 default -> throw new IllegalArgumentException("No se pudo actualizar la persona juridica");
             }

@@ -345,7 +345,7 @@ public class UsuarioController {
             String razonSocial = updateStateDTO.getRazonSocial();
             String destinatario = updateStateDTO.getCorreo();
 
-            PersonaJuridica personaJuridica = updateStateService.updateEstado(destinatario, ruc,flagUpdate,razonSocial ,usumod);
+            PersonaJuridica personaJuridica = updateStateService.updateEstado(destinatario, ruc,flagUpdate,razonSocial ,usumod,1);
             return ResponseEntity.ok("Estado actualizado correctamente.");
         } catch (EntityNotFoundException e) {
             log.error("Error al actualizar el estado de la persona jurídica 1", e);
