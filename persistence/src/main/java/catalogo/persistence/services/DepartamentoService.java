@@ -2,6 +2,7 @@ package catalogo.persistence.services;
 
 import catalogo.persistence.models.Departamento;
 import catalogo.persistence.repositories.DepartamentoRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,4 +17,5 @@ public class DepartamentoService {
     public Departamento getDepartamentoById(Integer codDep) {
         return departamentoRepository.findDepartamentoByCodDep(codDep);
     }
+
 }

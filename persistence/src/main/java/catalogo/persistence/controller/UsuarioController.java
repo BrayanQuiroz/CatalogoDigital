@@ -329,8 +329,6 @@ public class UsuarioController {
 
     }
 
-
-
     @PutMapping("/ActualizarEstado")
     public ResponseEntity<?> updateState(@RequestBody UpdateStateDTO updateStateDTO) {
 
@@ -346,7 +344,9 @@ public class UsuarioController {
             String destinatario = updateStateDTO.getCorreo();
 
             PersonaJuridica personaJuridica = updateStateService.updateEstado(destinatario, ruc,flagUpdate,razonSocial ,usumod,1);
+
             return ResponseEntity.ok("Estado actualizado correctamente.");
+
         } catch (EntityNotFoundException e) {
             log.error("Error al actualizar el estado de la persona jurídica 1", e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
